@@ -1,0 +1,34 @@
+title：
+        font-family: 'Calibri', sans-serif;
+        font-weight: bold;
+        font-size: 30.0pt;
+        color: #000000;
+        text-align: center; 
+        display: flex;
+        align-items: center; 
+        justify-content: center;
+        height: 100%;
+        line-height: 1.2;
+
+content list:
+        font-family: 'Calibri', sans-serif;
+        font-size: 28.0pt; 
+        color: #ffffff;
+        line-height: 1.45; 
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        limit:
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-bottom: 5px; 
+
+text:
+        font-family: 'Calibri', sans-serif;  /* 使用Calibri字体 */
+        font-size: 21pt;                     /* 21磅字体大小 */
+        color: #000000;                    /* 黑色文字 */
+        line-height: 1.3;                    /* 1.3倍行高，适中的行间距 */
+        text-align: left;                    /* 左对齐 */
+        overflow: hidden;                    /* 溢出隐藏 */
+
