@@ -37,7 +37,7 @@ auto/final/poster_final.png
 auto/markdown_refinement.md
 ## 常见问题
 1. mineru报错/失败：
-可以使用https://deepwiki.com/opendatalab/MinerU询问相关问题  
+可以使用https://deepwiki.com/opendatalab/MinerU
 2. aki key无法读入：
 目前只能稳定支持使用代理url的api调用方式，并且代理需要包含gpt-4o和gemini-3-pro-preview两个模型（推荐小镜ai）
 
