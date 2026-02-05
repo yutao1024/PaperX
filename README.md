@@ -58,6 +58,12 @@
 ## 🚀 Quick Start
 
 ### Requirements
+
+#### Clone this repository and navigate to the folder:
+```bash
+git clone https://github.com/yutao1024/PaperX.git
+cd PaperX
+```
 #### Create New Environment
 conda create -n PaperX python=3.10
 #### Install Mineru:
