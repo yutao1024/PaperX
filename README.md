@@ -25,7 +25,7 @@ export MINERU_TABLE_ENABLE=false
 export OPENAI_API_KEY="<你的api key>"  
 export OPENAI_BASE_URL="<你的代理url>"  
 ### 解析pdf：
-mineru -p papers -o mineru_outputs
+mineru -p papers -o mineru_outputs --sourcelocal -b pipeline
 ### 运行:
 python main.py
 ## Results
