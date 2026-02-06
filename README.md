@@ -139,6 +139,13 @@ OPENAI_API_BASE="https://api.openai.com/v1"
 # Your API Key
 OPENAI_API_KEY="sk-..."
 ```
+Download the PRBench dataset from Hugging Face Hub. 
+```bash
+python download_and_reconstruct_prbench.py \
+    --repo-id yzweak/PRBench \
+    --subset core \ # or "full"
+    --output-dir eval
+```
 Run PR evaluation:  
 ```
 chmod +x scripts/run_eval.sh  
