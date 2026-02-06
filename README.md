@@ -100,20 +100,56 @@ auto/final/poster_final.png
 3. pr:
 auto/markdown_refinement.md
 ### Evaluation
-#### ppt
+#### PPT
+Move the final slides for evaluation:  
+```bash
 cd PaperX/evaluation/PPTAgent/  
 python move_ppt.py  
-python run_benchmark.py  
-python run_exist_metrix.py  
-python calculate_avg.py  
-#### poster  
-#### pr  
+```
+Run the PPTAgent-eval metrix:  
+```bash
+# For single paper evaluation
+python run_benchmark.py /path/to/specific_paper_folder
+# For batch papers evaluation
+python run_benchmark.py /path/to/root_folder --batch
+```
+Run the existing metrix:  
+```bash
+# For single paper evaluation
+python run_exist_metrix.py /path/to/specific_paper_folder --token "Your HuggingFace Token"
+# For batch papers evaluation
+python run_exist_metrix.py /path/to/root_folder --batch --token "Your HuggingFace Token"
+```
+Aggregate all evaluation results:  
+```bash
+python calculate_avg.py
+```
+For reference to the original **Evaluation** of PPT, please click [here](https://github.com/icip-cas/PPTAgent).  
+#### Poster  
+#### PR  
+Move the final PRs for evaluation:  
+```bash
 cd PaperX/evaluation/AutoPR/  
-python move_pr.py  
+python move_pr.py
+```
+Edit the .env file with your API credentials:  
+```
+# Main API Base URL for text and vision models (e.g., OpenAI, Qwen, etc.)
+OPENAI_API_BASE="https://api.openai.com/v1"
+# Your API Key
+OPENAI_API_KEY="sk-..."
+```
+Run PR evaluation:  
+```
 chmod +x scripts/run_eval.sh  
-./scripts/run_eval.sh  
+./scripts/run_eval.sh
+```
+Calculate and View Metrics:  
+```
 chmod +x scripts/calc_results.sh  
 ./scripts/calc_results.sh  
+```
+For reference to the original **Evaluation** of PR, please click [here]([https://github.com/icip-cas/PPTAgent](https://github.com/LightChen233/AutoPR)).  
 ### Q&A
 1. Mineru defult:
 Use https://deepwiki.com/opendatalab/MinerU
