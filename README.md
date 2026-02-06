@@ -99,6 +99,21 @@ auto/final/<ppt_number>_ppt_final.png
 auto/final/poster_final.png
 3. pr:
 auto/markdown_refinement.md
+### Evaluation
+#### ppt
+cd PaperX/evaluation/PPTAgent/  
+python move_ppt.py  
+python run_benchmark.py  
+python run_exist_metrix.py  
+python calculate_avg.py  
+#### poster  
+#### pr  
+cd PaperX/evaluation/AutoPR/  
+python move_pr.py  
+chmod +x scripts/run_eval.sh  
+./scripts/run_eval.sh  
+chmod +x scripts/calc_results.sh  
+./scripts/calc_results.sh  
 ### Q&A
 1. Mineru defult:
 Use https://deepwiki.com/opendatalab/MinerU
