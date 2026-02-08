@@ -22,6 +22,8 @@ from .DAG2poster import generate_poster_outline_txt
 from .DAG2poster import modify_poster_outline
 from .DAG2poster import build_poster_from_outline
 from .DAG2poster import modify_title_and_author
+from .DAG2poster import inject_img_section_to_poster
+from .DAG2poster import modified_poster_logic
 
 from .DAG2pr import extract_basic_information
 from .DAG2pr import initialize_pr_markdown

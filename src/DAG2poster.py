@@ -1,3 +1,4 @@
+from __future__ import annotations
 import json
 import os
 import re
@@ -6,7 +7,10 @@ from pathlib import Path
 from typing import Optional
 from openai import OpenAI
 from typing import Any, Dict, List, Optional
-
+import traceback
+import shutil
+from pathlib import Path
+from bs4 import BeautifulSoup
 
 # ========== Generate poster_outline.txt via Gemini (section-by-section) ==========
 def _load_json(path: str) -> Dict[str, Any]:
@@ -584,3 +588,247 @@ def modify_title_and_author(dag_path: str, poster_path: str) -> None:
 
     with open(poster_path, "w", encoding="utf-8") as f:
         f.write(html)
+
+
+def inject_img_section_to_poster(
+    figure_path: str,
+    auto_path: str,
+    poster_path: str,
+    target_filename: str = "expore_our_work_in_detail.jpg",
+) -> str:
+    """
+    1) 将 figure_path 指向的图片复制到 auto_path/images/ 下（文件名固定为 target_filename）
+    2) 读取 poster_path 对应的 HTML，定位 <main class="main"> 内部的
+       <div class="flow" id="flow">（若存在），把 img-section 插入到该 flow div 的末尾，
+       从而保证新增块出现在 `</div> </main>` 的 </div>（flow 的闭合）之前。
+       若找不到 flow div，则退化为插入到 main 的末尾。
+
+    返回：写回后的 poster_path（绝对路径）
+    """
+    auto_dir = Path(auto_path).expanduser().resolve()
+    poster_file = Path(poster_path).expanduser().resolve()
+    src_figure = Path(figure_path).expanduser().resolve()
+
+    if not src_figure.exists() or not src_figure.is_file():
+        raise FileNotFoundError(f"figure_path not found or not a file: {src_figure}")
+    if not auto_dir.exists() or not auto_dir.is_dir():
+        raise FileNotFoundError(f"auto_path not found or not a directory: {auto_dir}")
+    if not poster_file.exists() or not poster_file.is_file():
+        raise FileNotFoundError(f"poster_path not found or not a file: {poster_file}")
+
+    # 1) copy image into auto/images/
+    images_dir = auto_dir / "images"
+    images_dir.mkdir(parents=True, exist_ok=True)
+
+    dst_figure = images_dir / target_filename
+    shutil.copy2(src_figure, dst_figure)
+
+    # 2) edit poster html
+    html_text = poster_file.read_text(encoding="utf-8")
+    soup = BeautifulSoup(html_text, "html.parser")
+
+    main_tag = soup.find("main", class_="main")
+    if main_tag is None:
+        raise ValueError(f'Cannot find <main class="main"> in poster: {poster_file}')
+
+    # Prefer inserting into the flow div so the new block sits right before </div> </main>
+    flow_tag = main_tag.find("div", attrs={"class": "flow", "id": "flow"})
+
+    # Avoid duplicate insertion
+    target_src = f"images/{target_filename}"
+    existing_img = main_tag.find("img", attrs={"src": target_src})
+    if existing_img is None:
+        new_div = soup.new_tag("div", attrs={"class": "img-section"})
+        new_img = soup.new_tag(
+            "img",
+            attrs={"src": target_src, "alt": "", "class": "figure"},
+        )
+        new_div.append(new_img)
+
+        if flow_tag is not None:
+            # Insert before </div> of flow
+            flow_tag.append(new_div)
+        else:
+            # Fallback: append to main
+            main_tag.append(new_div)
+
+    # Write back
+    poster_file.write_text(str(soup), encoding="utf-8")
+
+    return str(poster_file)
+
+
+# =================================优化逻辑性==================================
+def _parse_sections(html_text: str) -> List[dict]:
+    """
+    解析每个 <section class="section"> ... </section> 块，提取：
+    - section_block: 原始块文本
+    - title: section-bar 内标题
+    - first_p_inner: 第一个 <p>...</p> 的 inner 文本（可为空）
+    - p_span: 第一个 <p>...</p> 的 (start,end) 在 section_block 内的 span（包含<p>..</p>）
+    """
+    section_pat = re.compile(
+        r'(<section\s+class="section"\s*>.*?</section>)',
+        re.DOTALL | re.IGNORECASE,
+    )
+    sections = []
+    for m in section_pat.finditer(html_text):
+        block = m.group(1)
+
+        # 标题
+        title_m = re.search(
+            r'<div\s+class="section-bar"[^>]*>(.*?)</div>',
+            block,
+            re.DOTALL | re.IGNORECASE,
+        )
+        title = title_m.group(1).strip() if title_m else ""
+
+        # 只处理第一个 <p>...</p>
+        p_m = re.search(r'(<p\b[^>]*>)(.*?)(</p>)', block, re.DOTALL | re.IGNORECASE)
+        if p_m:
+            p_open, p_inner, p_close = p_m.group(1), p_m.group(2), p_m.group(3)
+            p_span = (p_m.start(0), p_m.end(0))
+            first_p_inner = p_inner
+        else:
+            p_span = None
+            first_p_inner = ""
+
+        sections.append(
+            {
+                "section_block": block,
+                "title": title,
+                "first_p_inner": first_p_inner,
+                "p_span": p_span,
+                "match_span_in_full": (m.start(1), m.end(1)),  # span in full html_text
+            }
+        )
+    return sections
+
+
+def _extract_json_array(text: str) -> List[str]:
+    """
+    从模型输出中提取 JSON 数组（允许模型带少量前后缀文本，但最终必须能抽到一个 [...]）。
+    """
+    text = text.strip()
+    # 直接就是JSON数组
+    if text.startswith("["):
+        try:
+            arr = json.loads(text)
+            if isinstance(arr, list) and all(isinstance(x, str) for x in arr):
+                return arr
+        except Exception:
+            pass
+
+    # 尝试抽取第一个 [...] 段
+    m = re.search(r"\[[\s\S]*\]", text)
+    if not m:
+        raise ValueError("LLM output does not contain a JSON array.")
+    arr_str = m.group(0)
+    arr = json.loads(arr_str)
+    if not (isinstance(arr, list) and all(isinstance(x, str) for x in arr)):
+        raise ValueError("Extracted JSON is not a list of strings.")
+    return arr
+
+
+def modified_poster_logic(
+    poster_outline_path_modified: str,
+    modified_poster_logic_prompt: str,
+    model: Optional[str] = None,
+    temperature: float = 0.2,
+) -> str:
+    """
+    读取 poster_outline_path_modified(txt) 的 HTML-like 内容；
+    把全文发给 LLM，让其“只输出”从第一个到倒数第二个小节需要追加的衔接句（JSON 数组，顺序一致）；
+    然后将这些衔接句依次追加到每个小节的第一个 <p>...</p> 的末尾（在 </p> 前），不改变任何原格式/内容；
+    最后覆盖写回原 txt，并返回该 txt 的绝对路径。
+
+    环境变量（OpenAI-style）：
+    - OPENAI_API_KEY: 必填
+    - OPENAI_BASE_URL: 可选（例如你的代理 url）
+    - OPENAI_MODEL: 可选（默认模型名）
+    """
+    txt_path = Path(poster_outline_path_modified).expanduser().resolve()
+    if not txt_path.exists() or not txt_path.is_file():
+        raise FileNotFoundError(f"txt not found: {txt_path}")
+
+    html_text = txt_path.read_text(encoding="utf-8")
+
+    sections = _parse_sections(html_text)
+    if len(sections) < 2:
+        # 不够两个小节就没必要加衔接句
+        return str(txt_path)
+
+    # 需要加衔接句的小节数量：从第1到倒数第2 => len(sections)-1
+    expected_n = len(sections) - 1
+
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise EnvironmentError("Missing env var OPENAI_API_KEY")
+
+    base_url = os.getenv("OPENAI_BASE_URL")  # 允许为空
+    model_name = model or os.getenv("OPENAI_MODEL") or "gpt-4o"
+
+    client = OpenAI(api_key=api_key, base_url=base_url) if base_url else OpenAI(api_key=api_key)
+
+    # 发给 LLM：prompt + 全文
+    messages = [
+        {"role": "system", "content": modified_poster_logic_prompt},
+        {"role": "user", "content": html_text},
+    ]
+    resp = client.chat.completions.create(
+        model=model_name,
+        messages=messages,
+        temperature=temperature,
+    )
+    out_text = resp.choices[0].message.content or ""
+    transitions = _extract_json_array(out_text)
+
+    if len(transitions) != expected_n:
+        raise ValueError(
+            f"Transition count mismatch: expected {expected_n}, got {len(transitions)}"
+        )
+
+    # 逐个 section 进行插入：只改 <p>...</p> inner 的末尾（</p> 前）
+    new_html_parts = []
+    cursor = 0
+
+    for i, sec in enumerate(sections):
+        full_start, full_end = sec["match_span_in_full"]
+        # 先拼接 section 之前的内容（保持原样）
+        new_html_parts.append(html_text[cursor:full_start])
+
+        block = sec["section_block"]
+        p_span = sec["p_span"]
+
+        if i <= len(sections) - 2:  # 第1到倒数第2个 section（0..n-2）
+            trans = transitions[i].strip()
+            if trans and p_span:
+                # 在该 section 的第一个 </p> 前插入：空格 + trans（不换行，不改缩进）
+                p_start, p_end = p_span
+                p_block = block[p_start:p_end]
+
+                # 找到 </p> 位置（在 p_block 内）
+                close_idx = p_block.lower().rfind("</p>")
+                if close_idx == -1:
+                    # 理论不该发生（p_span 由正则保证），保底不改
+                    new_block = block
+                else:
+                    insert = (" " + trans) if not p_block[:close_idx].endswith((" ", "\n", "\t")) else trans
+                    new_p_block = p_block[:close_idx] + insert + p_block[close_idx:]
+                    new_block = block[:p_start] + new_p_block + block[p_end:]
+            else:
+                # 没有 <p> 就不插入（按“只允许添加”原则，不强行造结构）
+                new_block = block
+        else:
+            # 最后一个 section 不加衔接句
+            new_block = block
+
+        new_html_parts.append(new_block)
+        cursor = full_end
+
+    # 追加尾部
+    new_html_parts.append(html_text[cursor:])
+    new_html_text = "".join(new_html_parts)
+
+    txt_path.write_text(new_html_text, encoding="utf-8")
+    return str(txt_path)
