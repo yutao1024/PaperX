@@ -86,7 +86,7 @@ def main():
 
         # === 清理 markdown ===                                              去除无意义的段落，如relative work，reference，appendix等等
         print("🧹 Cleaning markdown before splitting...")
-        cleaned_md_path = clean_paper_with_gpt(md_path, clean_prompt)
+        cleaned_md_path = clean_paper_with_gpt(md_path, clean_prompt, model_name="gemini-3-pro-preview")
         
         # === 利用gpt将论文分段 === 
         paths = split_paper_with_gpt(cleaned_md_path, section_split_prompt, model="gemini-3-pro-preview")
