@@ -140,6 +140,52 @@ python calculate_avg.py
 ```
 For reference to the original **Evaluation** of PPT, please click [here](https://github.com/icip-cas/PPTAgent).  
 #### Poster  
+Clone the Paper2Poster repository to the desired location
+```bash
+cd evaluation
+git clone https://github.com/Paper2Poster/Paper2Poster.git
+cd Paper2Poster
+```
+Download Paper2Poster evaluation dataset via:
+```bash
+python -m PosterAgent.create_dataset
+```
+Create a folder named PaperX_generated_posters and copy the Paper2Poster-data directory into it.
+For each subdirectory inside Paper2Poster-data, keep only the paper.pdf file and delete all other files.
+```bash
+# Create the target folder
+mkdir -p PaperX_generated_posters
+
+# Copy Paper2Poster-data into it
+cp -r Paper2Poster-data PaperX_generated_posters/
+
+# For each subfolder, keep only paper.pdf and remove all other files
+find PaperX_generated_posters/Paper2Poster-data -type f ! -name "paper.pdf" -delete
+
+```
+
+Use src/transfer_poster.py to move the generated poster results to Paper2Poster/PaperX_generated_posters/Paper2Poster-data
+```bash
+python transfer_poster.py
+```
+
+Start evaluation
+```bash
+# Terminal 1:
+python -m vllm.entrypoints.openai.api_server \
+  --host 0.0.0.0 \
+  --port 7000 \
+  --model Qwen/Qwen2.5-VL-7B-Instruct \
+  --trust-remote-code \
+  --tensor-parallel-size 2 \
+  --gpu-memory-utilization 0.95
+
+# Terminal 2:
+python src/run_paper2poster_benchmark.py --dir_a Paper2Poster/PaperX_generated_posters/Paper2Poster-data --dir_b Paper2Poster/eval_results
+```
+
+
+
 #### PR  
 Move the final PRs for evaluation:  
 ```bash
