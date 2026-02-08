@@ -1,0 +1,1 @@
+Set the target directory of the mineru command to this location; the generated results will be saved in this folder.
