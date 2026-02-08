@@ -57,7 +57,7 @@
 
 ## 🚀 Quick Start
 
-### Requirements
+### Installation
 
 #### Clone this repository and navigate to the folder:
 ```bash
