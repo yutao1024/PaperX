@@ -13,7 +13,7 @@ def load_prompt(prompt_path="prompt.json", prompt_name="poster_prompt"):
 # ========== 主流程 ==========
 def main():
     # 输入总文件夹路径（包含多个论文子文件夹）
-    root_folder = "/home/yutao/agent/P2S/Paper2Poster_Benchmark/output_addition/01"  # ⚠️ 修改为你的实际路径
+    root_folder = "mineru_outputs"  # ⚠️ 修改为你的实际路径
     prompt_path = "prompt.json"
 
 
@@ -141,8 +141,6 @@ def main():
         generate_ppt_with_gemini_prompt = {"role":"system","content":"You are given (1) a slide node (JSON) and (2) an HTML slide template. Your task: revise the HTML template to produce the final slide HTML using the node content. Node fields: text (slide textual content), figure (list of images to display, each has name, caption, resolution), formula (list of formula images to display, each has name, caption, resolution), template (template filename). IMPORTANT RULES: 1) Only modify places in the HTML that are marked by comments like <!-- You need to revise the following parts. X: ... -->. 2) For 'Subjects' sections: replace the placeholder title with ONE concise summary sentence for this slide. 3) For 'Image' sections (<img ...>): replace src with the relative path extracted from node.figure/formula[i].name; the node image name may be markdown like '![](images/abc.jpg)', use only 'images/abc.jpg'. 4) For 'Text' sections: replace the placeholder text with the node.text content, formatted cleanly in HTML; keep it readable and you may use <p>, <ul><li>, <br/> appropriately. 5) If the template expects more images/text blocks than provided by the node, leave the missing positions unchanged and do not invent content. 6) If the node provides more images than the template has slots, fill slots in order and ignore the rest. 7) Preserve all other HTML, CSS, and structure exactly. OUTPUT FORMAT: Return ONLY the revised HTML as plain text. Do NOT wrap it in markdown fences. Do NOT add explanations."}
         
         # ===下面的函数是用来调用智增增api的，当官方api充足时，可以替换掉这个函数（把zzz删除）===
-        # generate_ppt_with_gemini(outline_path,ppt_template_path,generate_ppt_with_gemini_prompt)
-        # generate_ppt_with_gemini_zzz(outline_path,ppt_template_path,generate_ppt_with_gemini_prompt)
         generate_ppt_with_gemini_xj(outline_path,ppt_template_path,generate_ppt_with_gemini_prompt,model="gemini-3-pro-preview")
 
         # ===  Refiner  ===                
