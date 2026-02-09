@@ -249,7 +249,7 @@ PaperX supports integration with Nano Banana to achieve improved visual quality:
 After integrating Nano Banana, PaperX also demonstrates stronger generalization ability, as illustrated by the generated mind map, overview, and web examples shown below:  
 <img width="3188" height="2588" alt="discussion_2" src="https://github.com/user-attachments/assets/e0a327f2-39cb-4a48-a5ae-131f277efb2c" />
 
-
+## 👏 Acknowledgments
 
 
 
