@@ -34,7 +34,6 @@
 🔜 The demo is coming soon.
 
 ## 🚀 Quick Start
-If you prefer to access the API via a relay proxy, please refer to the **[API Proxy](https://github.com/yutao1024/PaperX/tree/API%20Proxy)** branch.
 
 ### Installation
 
