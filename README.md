@@ -201,6 +201,10 @@ python -m vllm.entrypoints.openai.api_server \
   --gpu-memory-utilization 0.95
 
 # Terminal 2:
+# Set the API_KEY and BASE_URL environment variables:  
+export OPENAI_API_KEY = "YOUR_OPENAI_API_KEY"  
+export OPENAI_BASE_URL = "YOUR_OPENAI_BASE_URL" # (optional)  
+# evaluation:  
 python src/run_paper2poster_benchmark.py --dir_a Paper2Poster/PaperX_generated_posters/Paper2Poster-data --dir_b Paper2Poster/eval_results
 ```
 For reference to the original **Evaluation** of Posters, please click [here](https://github.com/Paper2Poster/Paper2Poster).
