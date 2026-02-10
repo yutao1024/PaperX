@@ -1,0 +1,13 @@
+# 项目基础设置
+path:
+  root_folder: "/home/yutao/agent/PaperX_copy/test_outputs"
+
+# 模型相关设置
+model_settings:
+  generation_model: "gemini-3-pro-preview"
+
+# 敏感信息（建议通过环境变量读取，或仅在本地调试时填写）
+api_keys:
+  gemini_api_key: "sk-5TOLjHJSn7uyRj2gXZLxYsRe9vxmr8N9XWK2lQHalvgXiBoc"
+  openai_api_key: "sk-5TOLjHJSn7uyRj2gXZLxYsRe9vxmr8N9XWK2lQHalvgXiBoc"
+
