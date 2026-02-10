@@ -58,8 +58,8 @@ if __name__ == "__main__":
     # --- 示例用法 ---
     
     # 请修改为你的实际路径
-    in_dir = r"/home/yutao/agent/P2S/Paper2Poster_Benchmark/output_addition/01"  # 输入根目录
-    out_dir = r"/home/yutao/agent/Paper2Poster/P2S_generated_posters/Paper2Poster-data" # 输出根目录
+    in_dir = r""  # 输入根目录
+    out_dir = r"" # 输出根目录
 
     print("开始执行文件转移...")
     transfer_posters(in_dir, out_dir)
