@@ -180,10 +180,3 @@ def convert_to_pptx(input_dir, output_dir, output_filename="merged_presentation.
         traceback.print_exc()
     finally:
         driver.quit()
-
-# if __name__ == "__main__":
-#     # 请根据实际情况修改目录
-#     INPUT_DIRECTORY = r"/home/yutao/agent/PPTAgent/html2pptx/html_input/HSCR_Hierarchical_Self-Contrastive_Rewarding_for_Aligning_Medical_Vision_Language_Models"
-#     OUTPUT_DIRECTORY = r"/home/yutao/agent/PPTAgent/html2pptx/pptx_output/HSCR_Hierarchical_Self-Contrastive_Rewarding_for_Aligning_Medical_Vision_Language_Models_havetext"
-    
-#     convert_to_pptx(INPUT_DIRECTORY, OUTPUT_DIRECTORY)
