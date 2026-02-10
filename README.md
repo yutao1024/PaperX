@@ -135,6 +135,11 @@ Move the final slides for evaluation:
 cd PaperX/evaluation/PPTAgent/  
 python move_ppt.py  
 ```
+Set the API_KEY and BASE_URL environment variables:
+```bash
+export OPENAI_API_KEY = "YOUR_OPENAI_API_KEY"
+export OPENAI_BASE_URL = "YOUR_OPENAI_BASE_URL" # (optional)
+```
 Run the PPTAgent-eval metrix:  
 ```bash
 # For single paper evaluation
