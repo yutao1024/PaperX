@@ -15,7 +15,7 @@ from playwright.sync_api import sync_playwright
 
 
 class VLMCommenter:
-    def __init__(self, api_key, prompt, provider="openai", model_name=None, base_url=None):
+    def __init__(self, api_key, prompt, provider="openai", model_name=None):
         """
         :param api_key: API Key
         :param prompt: 提示词文本
@@ -31,10 +31,7 @@ class VLMCommenter:
             self.client = OpenAI(api_key=api_key)
             self.model = model_name if model_name else "gpt-4o"
         elif self.provider == "gemini":
-            self.client = genai.Client(api_key=api_key,
-                                       http_options={
-                            "base_url": base_url
-                        })
+            self.client = genai.Client(api_key=api_key)
             self.model = model_name if model_name else "gemini-1.5-flash"
         else:
             raise ValueError("Unsupported provider. Choose 'openai' or 'gemini'.")
@@ -92,7 +89,7 @@ class VLMCommenter:
 
 
 class LLMReviser:
-    def __init__(self, api_key, prompt, provider="openai", model_name=None, base_url=None):
+    def __init__(self, api_key, prompt, provider="openai", model_name=None):
         """
         :param api_key: API Key
         :param prompt: 提示词文本
@@ -108,9 +105,7 @@ class LLMReviser:
             self.client = OpenAI(api_key=api_key)
             self.model = model_name if model_name else "gpt-4"
         elif self.provider == "gemini":
-            self.client = genai.Client(api_key=api_key, http_options={
-                            "base_url": base_url
-                        })
+            self.client = genai.Client(api_key=api_key)
             self.model = model_name if model_name else "gemini-1.5-pro"
         else:
             raise ValueError("Unsupported provider. Choose 'openai' or 'gemini'.")
@@ -301,18 +296,16 @@ def refine_one_slide(input_path, output_path, prompts, outline, max_iterations, 
 
     if is_gemini:
         api_key = config['api_keys'].get('gemini_api_key')
-        base_url = config['api_keys'].get('gemini_base_url')
     else:
         api_key = config['api_keys'].get('openai_api_key')
-        base_url = config['api_keys'].get('openai_base_url')
 
     commenter_prompt = prompts[0]
     reviser_prompt = prompts[1]
 
     platform = "gemini" if "gemini" in model.lower() else "openai"
 
-    vlm = VLMCommenter(api_key, commenter_prompt, provider=platform, model_name=model, base_url=base_url)
-    reviser = LLMReviser(api_key, reviser_prompt, provider=platform, model_name=model, base_url=base_url)
+    vlm = VLMCommenter(api_key, commenter_prompt, provider=platform, model_name=model)
+    reviser = LLMReviser(api_key, reviser_prompt, provider=platform, model_name=model)
 
     current_input = input_path
     critic_his = ""
@@ -533,14 +526,9 @@ def refinement_poster(input_html_path, prompts, output_html_path, model, config=
     try:
         if is_gemini:
             # === Gemini Client Setup ===
-            g_api_key = api_keys_conf.get('gemini_api_key') or os.getenv("GOOGLE_API_KEY")
-            g_base_url = api_keys_conf.get('gemini_base_url')
+            api_key = api_keys_conf.get('gemini_api_key') or os.getenv("GOOGLE_API_KEY")
             
-            client_kwargs = {"api_key": g_api_key}
-            if g_base_url:
-                client_kwargs["http_options"] = {"base_url": g_base_url}
-            
-            client = genai.Client(**client_kwargs)
+            client = genai.Client(api_key=api_key)
             
             # 构造 Gemini 所需的 Contents
             # 新版 SDK (google.genai) 推荐的构造方式
@@ -560,10 +548,9 @@ def refinement_poster(input_html_path, prompts, output_html_path, model, config=
 
         else:
             # === OpenAI Client Setup ===
-            o_api_key = api_keys_conf.get('openai_api_key') or os.getenv("OPENAI_API_KEY")
-            o_base_url = api_keys_conf.get('openai_base_url') or os.getenv("OPENAI_BASE_URL")
+            api_key = api_keys_conf.get('openai_api_key') or os.getenv("OPENAI_API_KEY")
             
-            client = OpenAI(api_key=o_api_key, base_url=o_base_url)
+            client = OpenAI(api_key=api_key)
 
             # OpenAI 需要 Base64 编码的图片
             base64_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -724,21 +711,16 @@ def refinement_pr(pr_path: str, pr_refine_path: str, prompts: dict, model: str, 
     try:
         if "gemini" in model.lower():
             # --- Google Gemini (New SDK) ---
-            gemini_key = api_keys.get("gemini_api_key", "").strip()
-            gemini_base = api_keys.get("gemini_base_url", "").strip()
+            api_key = api_keys.get("gemini_api_key", "").strip()
             
-            if not gemini_key:
+            if not api_key:
                 raise ValueError("Missing config['api_keys']['gemini_api_key']")
             
             from google import genai
             from google.genai import types
             
-            # 配置客户端，支持自定义 endpoint (Base URL)
-            client_kwargs = {"api_key": gemini_key}
-            if gemini_base:
-                client_kwargs["http_options"] = {"base_url": gemini_base}
-            
-            client = genai.Client(**client_kwargs)
+            # 配置客户端            
+            client = genai.Client(api_key=api_key)
             
             response = client.models.generate_content(
                 model=model,
@@ -753,18 +735,17 @@ def refinement_pr(pr_path: str, pr_refine_path: str, prompts: dict, model: str, 
             
         else:
             # --- OpenAI (Original) ---
-            openai_key = api_keys.get("openai_api_key", "").strip()
-            openai_base = api_keys.get("openai_base_url", "").strip() # 可以为 None或空字符串
+            api_key = api_keys.get("openai_api_key", "").strip()
             
-            if not openai_key:
+            if not api_key:
                  # 兼容性回退：如果config里没有，尝试读环境变量
-                openai_key = os.getenv("OPENAI_API_KEY")
+                api_key = os.getenv("OPENAI_API_KEY")
             
-            if not openai_key:
+            if not api_key:
                 raise ValueError("Missing config['api_keys']['openai_api_key']")
                 
             from openai import OpenAI
-            client = OpenAI(api_key=openai_key, base_url=openai_base if openai_base else None)
+            client = OpenAI(api_key=api_key)
             
             response = client.chat.completions.create(
                 model=model,
