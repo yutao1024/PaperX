@@ -155,7 +155,7 @@ def main():
         generate_ppt(outline_path,ppt_template_path,generate_ppt_prompt,model=model_name, config=config)
 
         # ===  Refiner  ===                
-        refinement_ppt(input_index=auto_path, prompts=[commenter_prompt, reviser_prompt], model=model_name, max_iterations=1, config=config)
+        refinement_ppt(input_index=auto_path, prompts=[commenter_prompt, reviser_prompt], model=model_name, max_iterations=3, config=config)
 
         # =============================  Poster部分  ================================
         
