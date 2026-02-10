@@ -17,7 +17,7 @@
 ## 📑 Table of Contents
 <font size=7><div align='center' >  
 
-[[🔥 News](#-news)]  [[🌈 Overview](#-overview)]   [[🧩 Demo](#-demo)]  [[🚀 Quick Start](#-quick-start)]  [[📸 Showcase](#-showcase)] 
+[[🔥 News](#-news)]  [[🌈 Overview](#-overview)]   [[🧩 Demo](#-demo)]  [[🚀 Quick Start](#-quick-start)]  [[📸 Showcase](#-showcase)]   [[👏 Acknowledgments](#-acknowledgments)]   [[📖 Citation](#-citation)]
 
 </div></font>
 
@@ -182,7 +182,7 @@ python -m vllm.entrypoints.openai.api_server \
 # Terminal 2:
 python src/run_paper2poster_benchmark.py --dir_a Paper2Poster/PaperX_generated_posters/Paper2Poster-data --dir_b Paper2Poster/eval_results
 ```
-
+For reference to the original **Evaluation** of Posters, please click [here](https://github.com/Paper2Poster/Paper2Poster).
 
 
 #### PR  
@@ -215,7 +215,7 @@ Calculate and View Metrics:
 chmod +x scripts/calc_results.sh  
 ./scripts/calc_results.sh  
 ```
-For reference to the original **Evaluation** of PR, please click [here]([https://github.com/icip-cas/PPTAgent](https://github.com/LightChen233/AutoPR)).  
+For reference to the original **Evaluation** of PR, please click [here](https://github.com/LightChen233/AutoPR).  
 
 ## 📸 Showcase
 ### PPTs
@@ -249,10 +249,20 @@ PaperX supports integration with Nano Banana to achieve improved visual quality:
 After integrating Nano Banana, PaperX also demonstrates stronger generalization ability, as illustrated by the generated mind map, overview, and web examples shown below:  
 <img width="3188" height="2588" alt="discussion_2" src="https://github.com/user-attachments/assets/e0a327f2-39cb-4a48-a5ae-131f277efb2c" />
 
-## 👏 Acknowledgments
+## 👏 Acknowledgments  
 
 
-
-
- 
+## 📖 Citation
+Please kindly cite our paper if you find this project helpful.
+```bibtex
+@misc{yu2026paperxunifiedframeworkmultimodal,
+      title={PaperX: A Unified Framework for Multimodal Academic Presentation Generation with Scholar DAG}, 
+      author={Tao Yu and Minghui Zhang and Zhiqing Cui and Hao Wang and Zhongtian Luo and Shenghua Chai and Junhao Gong and Yuzhao Peng and Yuxuan Zhou and Yujia Yang and Zhenghao Zhang and Haopeng Jin and Xinming Wang and Yufei Xiong and Jiabing Yang and Jiahao Yuan and Hanqing Wang and Hongzhu Yi and Yan Huang and Liang Wang},
+      year={2026},
+      eprint={2602.03866},
+      archivePrefix={arXiv},
+      primaryClass={cs.DL},
+      url={https://arxiv.org/abs/2602.03866}, 
+}
+```
    
