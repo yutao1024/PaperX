@@ -92,7 +92,7 @@ More configurations should be set in the `config.yaml` file:
 ```
 # Ouput Index Path
 path:
-  root_folder: "PaperX_copy/mineru_outputs"
+  root_folder: "PaperX/mineru_outputs"
 
 # Generation Model Settings
 model_settings:
@@ -103,6 +103,9 @@ api_keys:
   gemini_api_key: "YOUR_GEMINI_API_KEY"
   openai_api_key: "YOUR_OPENAI_API_KEY"
 ```
+Note: The DAG generation stage is fixed to use the gemini-3-pro model. For the generation of PPTs, posters, and PR content, you may freely choose either gemini-3-pro or gpt-4o. Please specify the selected model name in the  `generation_model ` field of the YAML configuration file. If you choose gpt-4o, make sure that the OpenAI API key is correctly provided
+
+
 #### Parse PDF files
 Use the following command to parse PDF files using **Mineru** and convert them into structured outputs for DAG construction.
 ```
