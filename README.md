@@ -83,12 +83,25 @@ papers/
 ```
 ### Launch Application
 #### Set up environment variables
-Before running the project, please configure the required environment variables as shown below
+Before running Mineru extension, please configure the required environment variables as shown below
 ```
 export MINERU_FORMULA_ENABLE=false  
 export MINERU_TABLE_ENABLE=false  
-export OPENAI_API_KEY="<Your api key>"  
-export OPENAI_BASE_URL="<Your url>"
+```
+More configurations should be set in the `config.yaml` file:
+```
+# Ouput Index Path
+path:
+  root_folder: "PaperX_copy/mineru_outputs"
+
+# Generation Model Settings
+model_settings:
+  generation_model: "gemini-3-pro-preview"
+
+# API Settings
+api_keys:
+  gemini_api_key: "YOUR_GEMINI_API_KEY"
+  openai_api_key: "YOUR_OPENAI_API_KEY"
 ```
 #### Parse PDF files
 Use the following command to parse PDF files using **Mineru** and convert them into structured outputs for DAG construction.
