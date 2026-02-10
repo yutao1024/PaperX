@@ -17,7 +17,7 @@
 ## 📑 Table of Contents
 <font size=7><div align='center' >  
 
-[[🔥 News](#-news)]  [[🌈 Overview](#-overview)]   [[🧩 Demo](#-demo)]  [[🚀 Quick Start](#-quick-start)]  [[📸 Showcase](#-showcase)]   [[👏 Acknowledgments](#-acknowledgments)]   [[📖 Citation](#-citation)]
+[[🔥 News](#-news)]  [[🌈 Overview](#-overview)]   [[🧩 Demo](#-demo)]  [[🚀 Quick Start](#-quick-start)]  [[📸 Showcase](#-showcase)]  [[📖 Citation](#-citation)]
 
 </div></font>
 
@@ -273,8 +273,6 @@ PaperX supports integration with Nano Banana to achieve improved visual quality:
 <img width="3731" height="2081" alt="discussion_1" src="https://github.com/user-attachments/assets/b00a2862-860c-47f7-8910-a1b4765e21f0" />
 After integrating Nano Banana, PaperX also demonstrates stronger generalization ability, as illustrated by the generated mind map, overview, and web examples shown below:  
 <img width="3188" height="2588" alt="discussion_2" src="https://github.com/user-attachments/assets/e0a327f2-39cb-4a48-a5ae-131f277efb2c" />
-
-## 👏 Acknowledgments  
 
 
 ## 📖 Citation
