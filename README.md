@@ -46,6 +46,7 @@ cd PaperX
 To ensure reproducibility and avoid dependency conflicts, we strongly recommend creating a dedicated Python environment for this project before installation.
 ```
 conda create -n PaperX python=3.10
+conda activate PaperX
 ```
 #### Install Mineru
 This project relies on **Mineru** for document parsing and structured content extraction.  
