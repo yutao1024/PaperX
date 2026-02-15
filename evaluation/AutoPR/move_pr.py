@@ -1,6 +1,8 @@
+import argparse
 import os
-import shutil
 import re
+import shutil
+
 
 def process_papers(src_root, dst_root):
     """
@@ -93,7 +95,8 @@ def process_papers(src_root, dst_root):
     print("所有任务处理完成。")
 
 if __name__ == "__main__":
-    input_source_root = "PaperX/mineru_outputs"
-    input_dst_root = "PaperX/eveluation/AutoPR/eval/output_dir"
-
-    process_papers(input_source_root, input_dst_root)
+    parser = argparse.ArgumentParser(description="Move PaperX-generated PR markdown and images to AutoPR eval layout.")
+    parser.add_argument("--src", default="PaperX/mineru_outputs", help="Root of mineru_outputs (paper subfolders with auto/).")
+    parser.add_argument("--dst", default="PaperX/evaluation/AutoPR/eval/output_dir", help="Output root for eval (paper/markdown.md, paper/img/).")
+    args = parser.parse_args()
+    process_papers(args.src, args.dst)
