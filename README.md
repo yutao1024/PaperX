@@ -93,7 +93,7 @@ More configurations should be set in the `config.yaml` file:
 ```
 # Ouput Index Path
 path:
-  root_folder: "PaperX/mineru_outputs"
+  root_folder: "./mineru_outputs"
 
 # Generation Model Settings
 model_settings:
