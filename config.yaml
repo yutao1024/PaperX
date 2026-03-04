@@ -1,6 +1,6 @@
 # 项目基础设置
 path:
-  root_folder: "PaperX/mineru_outputs"
+  root_folder: "./mineru_outputs"
 
 # 模型相关设置
 model_settings:
