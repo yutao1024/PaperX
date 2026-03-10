@@ -31,7 +31,7 @@
 
 ## 🧩 Demo
 
-🔜 The demo is coming soon.
+**[2026/03/10]** 🚀 PaperX Demo is now officially live on Hugging Face! Experience it here: https://huggingface.co/spaces/Kirito-Lab/PaperX
 
 ## 🚀 Quick Start
 
