@@ -7,6 +7,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-yutao1024%2FPaperX-24292F?style=flat-square&logo=github&logoColor=white)](https://github.com/yutao1024/PaperX)
 [![arXiv](https://img.shields.io/badge/arXiv-2602.03866-B31B1B?style=flat-square&logo=arxiv&logoColor=white)](http://arxiv.org/abs/2602.03866)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-orange)](https://huggingface.co/spaces/Kirito-Lab/PaperX)
 
 ✨ **Focus on Multimodal Academic Presentation Generation: from paper PDFs to PPTs, Posters, and PRs** ✨  
 
@@ -23,7 +24,9 @@
 
 ## 🔥 News
 
-**[2026/02/05]** 📄 PaperX is now available on arXiv: https://arxiv.org/abs/2602.03866
+**[2026/03/11]** 🚀 PaperX Demo is now officially live on Hugging Face! Click here to see our [demo](https://huggingface.co/spaces/Kirito-Lab/PaperX).
+
+**[2026/02/05]** 📄 PaperX is now available on [arXiv](https://arxiv.org/abs/2602.03866).
 
 ## 🌈 Overview    
 
@@ -31,7 +34,7 @@
 
 ## 🧩 Demo
 
-Our Demo will be coming soon.
+Experience PaperX, a multimodal academic generation and analysis platform, now live on Hugging Face Spaces as an interactive [demo](https://huggingface.co/spaces/Kirito-Lab/PaperX).
 
 ## 🚀 Quick Start
 
@@ -56,8 +59,7 @@ pip install --upgrade pip
 pip install uv  
 uv pip install -U "mineru[all]"
 ```
-If you have any questions about using MinerU, please visit:
-https://deepwiki.com/opendatalab/MinerU
+If you have any questions about using MinerU, please visit [MinerU Wiki](https://deepwiki.com/opendatalab/MinerU).
 #### Install dependencies
 After setting up the environment and installing Mineru, install the required Python dependencies for this project.  
 All dependencies are listed in `requirements.txt`. You can install them using the following command:
