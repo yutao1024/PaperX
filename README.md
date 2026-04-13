@@ -91,13 +91,7 @@ Before running Mineru extension, please configure the required environment varia
 export MINERU_FORMULA_ENABLE=false  
 export MINERU_TABLE_ENABLE=false  
 ```
-More configurations should be set in the `config.yaml` file. If you do not have one yet, copy from the example and edit:
-
-```bash
-cp config.example.yaml config.yaml
-```
-
-Then edit `config.yaml`:
+More configurations should be set in the `config.yaml` file:
 ```
 # Ouput Index Path
 path:
@@ -112,18 +106,8 @@ api_keys:
   gemini_api_key: "YOUR_GEMINI_API_KEY"
   openai_api_key: "YOUR_OPENAI_API_KEY"
 ```
+Note: The DAG generation stage is fixed to use the gemini-3-pro model. For the generation of PPTs, posters, and PR content, you may freely choose either gemini-3-pro or gpt-4o. Please specify the selected model name in the  `generation_model ` field of the YAML configuration file. If you choose gpt-4o, make sure that the OpenAI API key is correctly provided
 
-You can also specify a config file when running: `python main.py --config /path/to/config.yaml`.
-Note: The DAG generation stage is fixed to use the gemini-3-pro model. For the generation of PPTs, posters, and PR content, you may freely choose either gemini-3-pro or gpt-4o. Please specify the selected model name in the  `generation_model ` field of the YAML configuration file. If you choose gpt-4o, make sure that the OpenAI API key is correctly provided.
-
-**Optional: In-Context Learning (ICL)** — To improve output quality with few-shot examples (e.g. for section DAG and outline generation), add to `config.yaml`:
-```yaml
-icl:
-  enabled: true
-  max_examples_per_prompt: 2
-  examples_file: "icl_examples.json"
-```
-Create `icl_examples.json` with prompt-name keys and few-shot arrays. Supported keys: `section_dag_generation_prompt`, `outline_initialize_prompt`, `extract_basic_information_prompt`, `generate_pr_prompt`, `add_title_and_hashtag_prompt`, `poster_outline_prompt`, `modified_poster_logic_prompt`. Each value is an array of `{"input": "...", "output": "..."}`. See `icl_examples.json.example` for the format.
 
 #### Parse PDF files
 Use the following command to parse PDF files using **Mineru** and convert them into structured outputs for DAG construction.
@@ -131,17 +115,9 @@ Use the following command to parse PDF files using **Mineru** and convert them i
 mineru -p papers -o mineru_outputs --sourcelocal -b pipeline
 ```
 #### Run the program
-```bash
+```
 python main.py
 ```
-Optional arguments:
-- `--config PATH` — config file (default: `config.yaml`)
-- `--paper SUBDIR` — process only one paper subfolder
-- `--dry-run` — list which papers would be processed, then exit
-- `--force` — re-run even if `success.txt` exists
-
-Example: `python main.py --paper my_paper --force` to re-run a single paper.
-
 ### Results
 You can find the resulting PPT in the following directory:
 ```
@@ -240,7 +216,7 @@ For reference to the original **Evaluation** of Posters, please click [here](htt
 #### PR  
 Move the final PRs for evaluation:  
 ```bash
-cd PaperX/evaluation/AutoPR/
+cd PaperX/evaluation/AutoPR/  
 python move_pr.py
 ```
 Edit the .env file with your API credentials:  
