@@ -1,0 +1,19 @@
+{
+  "section_dag_generation_prompt": [
+    {
+      "input": "=== SECTION NAME ===\n1 Introduction\n\n=== SECTION MARKDOWN (FULL) ===\n\"\"\"# 1 Introduction\nThis paper presents...\"\"\"",
+      "output": "{\"nodes\": [{\"name\": \"1 Introduction\", \"content\": \"...\", \"edge\": [\"...\"], \"level\": 1, \"visual_node\": []}]}"
+    }
+  ],
+  "outline_initialize_prompt": [],
+  "extract_basic_information_prompt": [],
+  "generate_pr_prompt": [
+    {
+      "input": "You will receive ONE JSON object describing a paper section... Here is the node JSON:\n{\"name\": \"Introduction\", \"content\": \"...\", \"visual_node\": []}",
+      "output": "Key Question: ...\nBrilliant Idea: ..."
+    }
+  ],
+  "add_title_and_hashtag_prompt": [],
+  "poster_outline_prompt": [],
+  "modified_poster_logic_prompt": []
+}
