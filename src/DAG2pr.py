@@ -9,8 +9,6 @@ from google import genai
 from google.genai import types
 from openai import OpenAI
 
-from .llm_icl import get_instruction_with_icl
-
 
 # ========== Extract basic information for PR Generation ==========
 def extract_basic_information(
@@ -62,10 +60,6 @@ def extract_basic_information(
     user_message = (
         "ROOT_NODE_JSON:\n"
         + json.dumps(root_payload, ensure_ascii=False, indent=2)
-    )
-
-    extract_basic_information_prompt = get_instruction_with_icl(
-        "extract_basic_information_prompt", extract_basic_information_prompt, config
     )
 
     # 3) call LLM
@@ -312,10 +306,6 @@ def generate_pr_from_dag(
     if not section_nodes:
         log("[WARN] No section nodes to process; exiting.")
         return
-
-    generate_pr_prompt = get_instruction_with_icl(
-        "generate_pr_prompt", generate_pr_prompt, config
-    )
 
     # -------------------------
     # 2) Load PR markdown
@@ -680,12 +670,8 @@ def add_title_and_hashtag(pr_path: str, add_title_and_hashtag_prompt: str, model
 
     md_text = pr_file.read_text(encoding="utf-8")
 
-    add_title_and_hashtag_prompt = get_instruction_with_icl(
-        "add_title_and_hashtag_prompt", add_title_and_hashtag_prompt, config
-    )
-
     # -------------------------
-    # 1) Call LLM (Dual Support)
+    # 1) Call LLM (Modified for Dual Support)
     # -------------------------
     prompt_content = add_title_and_hashtag_prompt.replace("{MD_TEXT}", md_text)
     system_instruction = "You are a precise scientific social media copywriter."
