@@ -8,8 +8,6 @@ from openai import OpenAI
 from google import genai
 from google.genai import types
 
-from .llm_icl import get_instruction_with_icl
-
 
 # ==========  调用 Gemini 删除无用段落 ==========
 def clean_paper(markdown_path, clean_prompt, model, config):
@@ -533,13 +531,9 @@ def build_section_dags(
         api_key=config['api_keys']['gemini_api_key']
     )
 
-    base_prompt_effective = get_instruction_with_icl(
-        "section_dag_generation_prompt", base_prompt, config
-    )
-
-    def build_full_prompt(instruction: str, section_name: str, md_text: str) -> str:
+    def build_full_prompt(base_prompt: str, section_name: str, md_text: str) -> str:
         return (
-            f"{instruction}\n\n"
+            f"{base_prompt}\n\n"
             "=== SECTION NAME ===\n"
             f"{section_name}\n\n"
             "=== SECTION MARKDOWN (FULL) ===\n"
@@ -698,7 +692,7 @@ def build_section_dags(
         with open(markdown_path, "r", encoding="utf-8") as f:
             md_text = f.read().strip()
 
-        full_prompt = build_full_prompt(base_prompt_effective, section_name, md_text)
+        full_prompt = build_full_prompt(base_prompt, section_name, md_text)
         print(f"📐 Sending section '{section_name}' to Gemini for DAG generation...")
 
         dag_obj = None
