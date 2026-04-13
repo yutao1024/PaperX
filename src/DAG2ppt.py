@@ -133,9 +133,6 @@ from openai import OpenAI
 from google import genai
 from google.genai import types
 
-from .llm_icl import get_instruction_with_icl
-
-
 def outline_initialize(dag_json_path, outline_initialize_prompt, model, config):
     """
     使用 LLM 初始化 outline.json（仅创建两个节点：Title + Contents）
@@ -168,10 +165,6 @@ def outline_initialize(dag_json_path, outline_initialize_prompt, model, config):
         raise ValueError("Unsupported dag.json format")
 
     first_node_text = json.dumps(first_node, ensure_ascii=False, indent=2)
-
-    outline_initialize_prompt = get_instruction_with_icl(
-        "outline_initialize_prompt", outline_initialize_prompt, config
-    )
     
     # 系统提示词
     system_prompt = "You are an expert academic presentation outline generator."
