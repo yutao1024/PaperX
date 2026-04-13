@@ -8,8 +8,6 @@ from typing import Optional
 from openai import OpenAI
 from google import genai
 from typing import Any, Dict, List, Optional
-
-from .llm_icl import get_instruction_with_icl
 import traceback
 import shutil
 from pathlib import Path
@@ -169,10 +167,6 @@ def generate_poster_outline_txt(
             
             client = OpenAI(api_key=api_key)
 
-    poster_outline_instruction = get_instruction_with_icl(
-        "poster_outline_prompt", poster_outline_prompt, config
-    )
-
     # Output file init
     out_dir = os.path.dirname(os.path.abspath(poster_outline_path))
     if out_dir and not os.path.exists(out_dir):
@@ -243,7 +237,7 @@ def generate_poster_outline_txt(
                 image_src = best_image_src or ""
                 if image_src and not image_src.startswith("images/") and "images/" in image_src:
                     pass
-                current_input = poster_outline_prompt.format(
+                payload = poster_outline_prompt.format(
                     SECTION_JSON=section_json_str,
                     HAS_VISUAL="true",
                     VISUAL_JSON=visual_json_str,
@@ -251,14 +245,13 @@ def generate_poster_outline_txt(
                     ALT_TEXT=alt_text,
                 )
             else:
-                current_input = poster_outline_prompt.format(
+                payload = poster_outline_prompt.format(
                     SECTION_JSON=section_json_str,
                     HAS_VISUAL="false",
                     VISUAL_JSON="",
                     IMAGE_SRC="",
                     ALT_TEXT="",
                 )
-            payload = poster_outline_instruction + "\n\n--- Current section input ---\n" + current_input
 
             # Call API based on model type
             html_block = ""
@@ -777,10 +770,6 @@ def modified_poster_logic(
 
     # 需要加衔接句的小节数量：从第1到倒数第2 => len(sections)-1
     expected_n = len(sections) - 1
-
-    modified_poster_logic_prompt = get_instruction_with_icl(
-        "modified_poster_logic_prompt", modified_poster_logic_prompt, config
-    )
 
     # 确定模型名称
     model_name = model or os.getenv("OPENAI_MODEL") or "gpt-4o"
